@@ -1,2 +1,2 @@
 # python-werewolves
-Are you a Werewolf game in python
+"Are you a Werewolf?" game in python
