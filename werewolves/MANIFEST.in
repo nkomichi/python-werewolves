@@ -1,0 +1,4 @@
+include werewolves/schema.sql
+graft werewolves/static
+graft werewolves/templates
+global-execute *.pyc

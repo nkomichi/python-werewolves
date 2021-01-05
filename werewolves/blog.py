@@ -40,8 +40,10 @@ def create():
                 (title, body, g.user['id'])
             )
             db.commit()
+            return redirect(url_for('blog.index'))
 
     return render_template('blog/create.html')
+
 
 def get_post(id, check_author=True):
     post = get_db().execute(
@@ -58,6 +60,7 @@ def get_post(id, check_author=True):
         abort(403)
     
     return post
+
 
 @bp.route('/<int:id>/update', methods=('GET', 'POST'))
 @login_required
