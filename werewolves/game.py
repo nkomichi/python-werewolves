@@ -18,7 +18,7 @@ def index():
 
 
 @bp.route('/<int:game_id>/', methods=('GET', 'POST'))
-def game_current(game_id):
+def current(game_id):
     if request.method == 'POST':
         error = None
         body = request.form['body']
@@ -34,7 +34,7 @@ def game_current(game_id):
                 (body, g.user['id'])
             )
             db.commit()
-            return redirect(url_for('game.game_current', game_id=game_id))
+            return redirect(url_for('game.current', game_id=game_id))
 
     db = get_db()
     game = get_game(game_id)
@@ -47,7 +47,7 @@ def game_current(game_id):
 
 
 @bp.route('/<int:game_id>/<int:day>/')
-def game_history(game_id, day):
+def history(game_id, day):
     db = get_db()
     game = db.execute(
         'SELECT id, title, day FROM game'
@@ -60,6 +60,7 @@ def game_history(game_id, day):
         ' ORDER BY created DESC'
     ).fetchall()
     return render_template('game/game.html', game=game, posts=posts)
+
 
 @bp.route('/create', methods=('GET', 'POST'))
 @login_required
@@ -85,7 +86,7 @@ def create():
                 ' WHERE rowid = last_insert_rowid();'
             ).fetchone()['id']
             db.commit()
-            return redirect(url_for('game.game_current', game_id=game_id))
+            return redirect(url_for('game.current', game_id=game_id))
 
     return render_template('game/create.html')
 
@@ -108,8 +109,7 @@ def get_post(id, check_author=True):
 
 
 def get_game(game_id):
-    """ゲーム情報を取得する
-    """
+    """ゲーム情報を取得する"""
     game = get_db().execute(
         'SELECT id, title, day, humans, wolves FROM game WHERE id = ?', (game_id)
     ).fetchone()
@@ -117,11 +117,15 @@ def get_game(game_id):
 
 
 def is_game_finished(game):
-    """ゲームの勝敗を判定する
-    """
+    """ゲームの勝敗を判定する"""
     winner = None
     if game['wolves'] <= 0:
         winner = 'humans'
     if game['wolves'] >= game['humans']:
         winner = 'wolves'
     return winner
+
+
+@bp.route('/<int:game_id>/proceed', methods=('post',))
+def proceed_day(game_id):
+    return redirect(url_for('game.current', game_id=game_id))
