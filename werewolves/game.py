@@ -12,7 +12,7 @@ bp = Blueprint('game', __name__)
 def index():
     db = get_db()
     games = db.execute(
-        'SELECT id, name, day, created, ended FROM game'
+        'SELECT id, title, day, created, ended FROM game'
     )
     return render_template('game/index.html', games=games)
 
@@ -36,12 +36,12 @@ def current(game_id):
             db.commit()
             return redirect(url_for('game.current', game_id=game_id))
 
-    db = get_db()
     game = get_game(game_id)
+    db = get_db()
     posts = db.execute(
         'SELECT p.id, body, created, author_id, username'
         ' FROM post p JOIN user u ON p.author_id = u.id'
-        ' ORDER BY created DESC'
+        ' ORDER BY created ASC'
     ).fetchall()
     return render_template('game/game.html', game=game, posts=posts)
 
@@ -79,7 +79,7 @@ def create():
             db.execute(
                 'INSERT INTO game (title)'
                 ' VALUES (?);',
-                (title)
+                (title,)
             )
             game_id = db.execute(
                 'SELECT id FROM game'
@@ -111,7 +111,7 @@ def get_post(id, check_author=True):
 def get_game(game_id):
     """ゲーム情報を取得する"""
     game = get_db().execute(
-        'SELECT id, title, day, humans, wolves FROM game WHERE id = ?', (game_id)
+        'SELECT id, title, day, humans, wolves FROM game WHERE id = ?', (game_id,)
     ).fetchone()
     return game
 
@@ -126,6 +126,10 @@ def is_game_finished(game):
     return winner
 
 
-@bp.route('/<int:game_id>/proceed', methods=('post',))
+def next(game_id):
+    """フェーズをを進行させる"""
+    pass
+
 def proceed_day(game_id):
-    return redirect(url_for('game.current', game_id=game_id))
+    """日を進める"""
+    pass

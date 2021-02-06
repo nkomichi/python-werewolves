@@ -1,4 +1,4 @@
-import functools
+from functools import wraps
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
 )
@@ -23,7 +23,7 @@ def register():
         elif db.execute(
             'SELECT id FROM user WHERE username = ?', (username,)
         ).fetchone() is not None:
-            error = 'User {} is already registered.'.format(username)
+            error = f"User {username} is already registered."
 
         if error is None:
             db.execute(
@@ -31,6 +31,10 @@ def register():
                 (username, generate_password_hash(password))
             )
             db.commit()
+            user = db.execute(
+                'SELECT id FROM user WHERE username = ?', (username,)
+            ).fetchone()
+            session['user_id'] = user['id']
             return redirect(url_for('index'))
         
         flash(error)
@@ -82,11 +86,9 @@ def logout():
 
 
 def login_required(view):
-    @functools.wraps(view)
+    @wraps(view)
     def wrapped_view(**kwargs):
         if g.user is None:
             return redirect(url_for('auth.login'))
-        
         return view(**kwargs)
-
     return wrapped_view

@@ -71,3 +71,14 @@ GMの操作で深夜に移行する
 襲撃対象の集計を行う
 
 翌日の朝に移行する
+
+## コマンド
+### 全員
+- /v(ote) player_id [comment] プレイヤーを処刑対象として投票する
+- /w(hisper) comment 独り言を言う
+
+- /b(ite) player_id [comment] プレイヤーを襲撃対象として投票する
+
+### GMコマンド
+- /next 次のフェーズに移行する
+- /kick player_id [comment] プレイヤーをキックする

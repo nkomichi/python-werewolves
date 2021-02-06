@@ -1,18 +1,11 @@
 {% extends 'base.html' %}
 
 {% block header %}
-    <h1>{% block title %}Posts{% endblock %}</h1>
+    <h1>{% block title %}{{ game['title'] }} - day {{ game['day'] }}{% endblock %}</h1>
 {% endblock %}
 
 
 {% block content %}
-    {% if g.user %}
-    <form method="post">
-        <label for="body">Body</label>
-        <textarea id="body" name="body" required></textarea>
-        <input type="submit" value="Post">
-    </form>
-    {% endif %}
     {% for post in posts %}
         <article class="post">
             <header>
@@ -20,9 +13,6 @@
                     <h1>{{ post['title'] }}</h1>
                     <div class="about">by {{ post['username'] }} on {{ post['created'].strftime('%Y-%m-%d') }}</div>
                 </div>
-                {% if g.user['id'] == post['author_id'] %}
-                    <a class="action" href="{{ url_for('game.update', id=post['id']) }}">Edit</a>
-                {% endif %}
             </header>
             <p class="body">{{ post['body'] }}</p>
         </article>
@@ -30,4 +20,11 @@
             <hr>
         {% endif %}
     {% endfor %}
+    {% if g.user %}
+    <form method="post">
+        <label for="body">Body</label>
+        <textarea id="body" name="body" required></textarea>
+        <input type="submit" value="Post">
+    </form>
+    {% endif %}
 {% endblock %}
