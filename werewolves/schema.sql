@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS game;
-DROP TABLE IF EXISTS player;
+DROP TABLE IF EXISTS play;
 DROP TABLE IF EXISTS post;
 
 CREATE TABLE user (
@@ -20,21 +20,24 @@ CREATE TABLE game (
     wolves INTEGER NOT NULL DEFAULT 0
 );
 
-CREATE TABLE player (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+CREATE TABLE play (
     user_id INTEGER NOT NULL,
     game_id INTEGER NOT NULL,
     name TEXT NOT NULL,
-    role TEXT NOT NULL,
+    role INTEGER,
+    PRIMARY KEY (user_id, game_id),
     FOREIGN KEY (user_id) REFERENCES user (id),
     FOREIGN KEY (game_id) REFERENCES game (id)
 );
 
 CREATE TABLE post (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    game_id INTEGER NOT NULL,
+    day INTEGER NOT NULL,
+    number INTEGER NOT NULL,
     author_id INTEGER NOT NULL,
-    created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     body TEXT NOT NULL,
+    created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (game_id) REFERENCES game (id)
     FOREIGN KEY (author_id) REFERENCES user (id)
 );
 

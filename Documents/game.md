@@ -73,12 +73,19 @@ GMの操作で深夜に移行する
 翌日の朝に移行する
 
 ## コマンド
+### 未参加
+- /j(oin) [name] 名前を指定してゲームに参加する。
+
 ### 全員
 - /v(ote) player_id [comment] プレイヤーを処刑対象として投票する
 - /w(hisper) comment 独り言を言う
 
+### 役職限定
+/r(ole) で実行可能
+狼
 - /b(ite) player_id [comment] プレイヤーを襲撃対象として投票する
 
 ### GMコマンド
-- /next 次のフェーズに移行する
-- /kick player_id [comment] プレイヤーをキックする
+- /n(ext) 次のフェーズに移行する
+- /d(irect) player_id message プレイヤーにダイレクトメッセージを行う
+- /k(ick) player_id [comment] プレイヤーをキックする
